@@ -22,6 +22,12 @@ func main() {
 		v1.POST("/login",controllers.Login)
 		v1.GET("/user",middleware.JWTAuthMiddleware(),controllers.CurrentUser)
 	}
+	// health check
+	r.GET("/health/check", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"status": "true",
+		})
+	})
 	
 	r.Run()
 }
