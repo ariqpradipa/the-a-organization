@@ -35,5 +35,5 @@ jobs:
         with:
           context: "{{defaultContext}}:./node-fastify-backend"
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/go-gin-backend:latest-arm64
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/node-fastify-backend:latest-arm64
           platforms: linux/arm64
