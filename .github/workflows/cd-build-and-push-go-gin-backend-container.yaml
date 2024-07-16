@@ -9,6 +9,9 @@ on:
 jobs:
   build-and-push-go-gin-backend-container:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./go-gin-backend
     
     steps:
       - name: Set up QEMU
@@ -26,7 +29,5 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          file: go-gin-backend/Dockerfile
-          context: ./go-gin-backend
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/go-gin-backend:latest
