@@ -16,6 +16,7 @@ jobs:
           running-workflow-name: 'ci-test-node-fastify-backend'
           repo-token: ${{ github.token }}
           wait-interval: 10
+          allowed-conclusions: success,skipped
 
       - name: Checkout code
         uses: actions/checkout@v4
