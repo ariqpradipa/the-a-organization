@@ -26,6 +26,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: ./go-gin-backend
+          file: ./go-gin-backend/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/go-gin-backend:latest
