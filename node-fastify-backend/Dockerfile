@@ -13,7 +13,7 @@ COPY package.json pnpm-lock.yaml tsconfig.json ./
 COPY src src
 
 # Install dependencies and build
-RUN npm install -g pnpmss
+RUN npm install -g pnpm
 RUN pnpm install
 ENV NODE_ENV=production
 RUN pnpm run build
