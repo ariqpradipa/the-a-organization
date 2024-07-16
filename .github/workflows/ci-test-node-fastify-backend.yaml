@@ -15,11 +15,10 @@ jobs:
     - name: Set up Node.js using pnpm
       uses: pnpm/action-setup@v4
     
-    - name: Change directory
-      run: cd node-fastify-backend
-
     - name: Install dependencies
+      working-directory: node-fastify-backend  # Change directory for subsequent steps
       run: pnpm install
 
     - name: Run tests
+      working-directory: node-fastify-backend  # Change directory for subsequent steps
       run: npm run test

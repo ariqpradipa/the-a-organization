@@ -1,6 +1,6 @@
 name: Test Go Gin Backend
 
-on: 
+on:
   pull_request:
     types: [opened, synchronize, ready_for_review]
 
@@ -17,13 +17,11 @@ jobs:
       with:
         go-version: 'stable'
 
-    - name: Change directory
-      run: cd go-gin-backend
-
     - name: Install dependencies
-      run: go mod download
-    
-    - name: Run tests
-      run: go test
+      run: |
+        cd go-gin-backend
+        go mod download
 
-    
+    - name: Run tests
+      working-directory: go-gin-backend  # Change directory for subsequent steps
+      run: go test
