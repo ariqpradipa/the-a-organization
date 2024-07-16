@@ -14,7 +14,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t encores/go-gin-backend:latest .
+          docker build -t encores/go-gin-backend:latest ./go-gin-backend
           docker run -d -p 3001:3001 --name go-gin-backend encores/go-gin-backend:latest
           sleep 10  # Adjust time as needed for container startup
 
