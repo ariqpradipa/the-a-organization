@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-fastify-backend
+  labels:
+    app: node-fastify-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: node-fastify-backend
+  template:
+    metadata:
+      labels:
+        app: node-fastify-backend
+    spec:
+      containers:
+        - name: node-fastify-backend
+          image: encores/node-fastify-backend:latest
+          ports:
+            - containerPort: 3000
+          resources:
+            requests:
+              cpu: "1"
+              memory: "512Mi"
+            limits:
+              cpu: "1"
+              memory: "512Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-fastify-backend-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: node-fastify-backend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000

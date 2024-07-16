@@ -9,7 +9,7 @@ on:
 jobs:
   build-and-push-go-gin-backend-container:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -23,9 +23,17 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push
+      - name: Build and push for x64
         uses: docker/build-push-action@v6
         with:
           context: "{{defaultContext}}:./go-gin-backend"
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/go-gin-backend:latest
+      
+      - name: Build and push for ARM64 (aarch64)
+        uses: docker/build-push-action@v6
+        with:
+          context: "{{defaultContext}}:./go-gin-backend"
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/go-gin-backend:latest-arm64
+          platforms: linux/arm64
