@@ -15,11 +15,13 @@ jobs:
       - name: Get Changed Directories
         id: get-changed-dirs
         run: |
-
           # Get the list of changed directories
-          CHANGED_DIRS=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '^[^/]+/' | cut -d/ -f1 | sort -u)
-          echo "Changed Directories: $CHANGED_DIRS"
+          # Get the list of changed files
+          changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
 
-          # Set the output variable
-          echo "::set-output name=changed-dirs::$CHANGED_DIRS"
-     
+          # Get unique directories containing the changed files
+          changed_dirs=$(echo "$changed_files" | xargs -n 1 dirname | sort | uniq)
+
+          # Print the directories
+          echo "Changed directories:"
+          echo "$changed_dirs"
