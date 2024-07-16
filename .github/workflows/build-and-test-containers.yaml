@@ -1,0 +1,25 @@
+name: Build and Test Containers
+
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review]
+
+jobs:
+  build-and-test-containers:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Get Changed Directories
+        id: get-changed-dirs
+        run: |
+
+          # Get the list of changed directories
+          CHANGED_DIRS=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '^[^/]+/' | cut -d/ -f1 | sort -u)
+          echo "Changed Directories: $CHANGED_DIRS"
+
+          # Set the output variable
+          echo "::set-output name=changed-dirs::$CHANGED_DIRS"
+     

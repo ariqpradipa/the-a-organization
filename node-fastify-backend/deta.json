@@ -1,0 +1,6 @@
+{
+  "name": "fastify-starter",
+  "description": "Fastify Typescript Starter",
+  "runtime": "nodejs18.x",
+  "env": []
+}
