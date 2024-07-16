@@ -15,13 +15,42 @@ jobs:
       - name: Get Changed Directories
         id: get-changed-dirs
         run: |
-          # Get the list of changed directories
-          # Get the list of changed files
-          changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+          # Input
+          GITHUB_PULL_REQUEST_NUMBER='${{ github.event.number == '' && github.event.pull_request.number || github.event.number }}'
 
-          # Get unique directories containing the changed files
-          changed_dirs=$(echo "$changed_files" | xargs -n 1 dirname | sort | uniq)
+          # Get the list of changed files in the pull request
+          CHANGED_FILES=$(gh api "/repos/$GITHUB_REPOSITORY/pulls/$GITHUB_PULL_REQUEST_NUMBER/files" --jq '.[].filename' --paginate)
 
-          # Print the directories
-          echo "Changed directories:"
-          echo "$changed_dirs"
+          # Print the list of changed files
+          echo "Changed Files"
+          echo "============="
+          echo "$CHANGED_FILES"
+          echo ""
+
+          # Get unique directories based on known changed files
+          IFS=$'\n' read -r -d '' -a CHANGED_FILES_ARRAY <<< "$CHANGED_FILES"
+          RAW_UNIQUE_CHANGED_DIRECTORIES=$(printf "%s\n" "${CHANGED_FILES_ARRAY[@]}" | sed 's:[^/]*$::' | sort -u)
+
+          echo "Raw Unique Changed Directories"
+          echo "=============================="
+          for dir in $RAW_UNIQUE_CHANGED_DIRECTORIES; do
+              echo "$dir"
+          done
+          echo ""
+
+          # Check for Dockerfiles in the directories
+          CHANGED_DOCKERFILE_DIRECTORY=""
+          for RAW_DIR in $RAW_UNIQUE_CHANGED_DIRECTORIES; do
+              echo "Working on: $RAW_DIR"
+
+              # Check if Dockerfile exists in the directory
+              if [ -d "$RAW_DIR" ] && [ -n "$(find "$RAW_DIR" -maxdepth 1 -type f -name 'Dockerfile')" ]; then
+                  echo "Directory contains Dockerfiles"
+                  CHANGED_DOCKERFILE_DIRECTORY="${CHANGED_DOCKERFILE_DIRECTORY} $RAW_DIR"
+              fi
+          done
+
+          # Print the unique changed directories containing Dockerfiles
+          echo "Unique Changed Directories"
+          echo "==========================="
+          echo "$CHANGED_DOCKERFILE_DIRECTORY"
