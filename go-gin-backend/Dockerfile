@@ -23,4 +23,4 @@ EXPOSE 3001
 ENV PORT=3001
 
 # Command to run the executable
-CMD ["./dd"]
+CMD ["./main"]
