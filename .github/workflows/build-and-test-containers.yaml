@@ -54,3 +54,5 @@ jobs:
           echo "Unique Changed Directories"
           echo "==========================="
           echo "$CHANGED_DOCKERFILE_DIRECTORY"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
