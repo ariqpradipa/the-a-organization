@@ -9,9 +9,6 @@ on:
 jobs:
   build-and-push-node-fastify-backend-container:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./node-fastify-backend
     
     steps:
       - name: Set up QEMU
@@ -29,5 +26,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
+          context: "{{defaultContext}}:./node-fastify-backend"
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/node-fastify-backend:latest
