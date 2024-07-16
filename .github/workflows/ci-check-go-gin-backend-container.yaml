@@ -1,27 +1,35 @@
-name: Build and Test Node Fastify Backend Service
+name: Check Go Gin Backend Service Container
 
 on:
   pull_request:
     types: [opened, synchronize, ready_for_review]
 
 jobs:
-  build-and-test-node-fastify-backend:
+  ci-check-go-gin-backend-container:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Wait for go-gin-backend tests to succeed
+        uses: lewagon/wait-on-check-action@v1.3.4
+        with:
+          ref: ${{ github.ref }}
+          check-name: 'ci-test-go-gin-backend'
+          repo-token: ${{ github.token }}
+          wait-interval: 10
+
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Build Docker image
         run: |
-          docker build -t encores/node-fastify-backend:latest ./node-fastify-backend
-          docker run -d -p 3000:3000 --name node-fastify-backend encores/node-fastify-backend:latest
+          docker build -t encores/go-gin-backend:latest ./go-gin-backend
+          docker run -d -p 3001:3001 --name go-gin-backend encores/go-gin-backend:latest
           sleep 10  # Adjust time as needed for container startup
 
       - name: Health Check
         id: healthcheck
         run: |
-          status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/health/check)
+          status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3001/health/check)
           echo "Health check status: $status"
           if [ $status -eq 200 ]; then
             echo "status=success" >> $GITHUB_OUTPUT

@@ -1,0 +1,25 @@
+name: Test Node Fastify Backend
+
+on: 
+  pull_request:
+    types: [opened, synchronize, ready_for_review]
+
+jobs:
+  ci-test-node-fastify-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js using pnpm
+      uses: pnpm/action-setup@v4
+    
+    - name: Change directory
+      run: cd node-fastify-backend
+
+    - name: Install dependencies
+      run: pnpm install
+
+    - name: Run tests
+      run: npm run test

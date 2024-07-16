@@ -1,0 +1,49 @@
+name: Check Node Fastify Backend Service Container
+
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review]
+
+jobs:
+  ci-check-node-fastify-backend-container:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Wait for node-fastify-backend tests to succeed
+        uses: lewagon/wait-on-check-action@v1.3.4
+        with:
+          ref: ${{ github.ref }}
+          check-name: 'ci-test-node-fastify-backend'
+          repo-token: ${{ github.token }}
+          wait-interval: 10
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: |
+          docker build -t encores/node-fastify-backend:latest ./node-fastify-backend
+          docker run -d -p 3000:3000 --name node-fastify-backend encores/node-fastify-backend:latest
+          sleep 10  # Adjust time as needed for container startup
+
+      - name: Health Check
+        id: healthcheck
+        run: |
+          status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/health/check)
+          echo "Health check status: $status"
+          if [ $status -eq 200 ]; then
+            echo "status=success" >> $GITHUB_OUTPUT
+          else
+            echo "status=failure" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+
+      - name: Cleanup
+        if: always()
+        run: |
+          docker stop node-fastify-backend
+          docker rm node-fastify-backend
+
+      - name: Set status
+        if: always()
+        run: echo "Health check status is ${{ steps.healthcheck.outputs.status }}"
