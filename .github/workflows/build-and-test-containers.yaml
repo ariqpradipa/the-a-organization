@@ -28,9 +28,8 @@ jobs:
           echo ""
 
           # Get unique directories based on known changed files
-          IFS=$'\n' read -r -d '' -a CHANGED_FILES_ARRAY <<< "$CHANGED_FILES"
-          RAW_UNIQUE_CHANGED_DIRECTORIES=$(printf "%s\n" "${CHANGED_FILES_ARRAY[@]}" | sed 's:[^/]*$::' | sort -u)
-
+          RAW_UNIQUE_CHANGED_DIRECTORIES=$(echo $CHANGED_FILES | sed 's/ /\n/g' | sed 's:[^/]*$::' | sort | uniq)
+          
           echo "Raw Unique Changed Directories"
           echo "=============================="
           for dir in $RAW_UNIQUE_CHANGED_DIRECTORIES; do
