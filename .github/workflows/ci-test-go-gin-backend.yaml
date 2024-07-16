@@ -1,0 +1,29 @@
+name: Test Go Gin Backend
+
+on: 
+  pull_request:
+    types: [opened, synchronize, ready_for_review]
+
+jobs:
+  ci-test-go-gin-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: 'stable'
+
+    - name: Change directory
+      run: cd go-gin-backend
+
+    - name: Install dependencies
+      run: go mod download
+    
+    - name: Run tests
+      run: go test
+
+    
