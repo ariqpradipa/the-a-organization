@@ -53,5 +53,32 @@ jobs:
           echo "Unique Changed Directories"
           echo "==========================="
           echo "$CHANGED_DOCKERFILE_DIRECTORY"
+
+          # Set the output variable
+          echo "CHANGED_DOCKERFILE_DIRECTORY=$CHANGED_DOCKERFILE_DIRECTORY" >> $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Build and Test Containers
+        if: steps.get-changed-dirs.outputs.CHANGED_DOCKERFILE_DIRECTORY != ''
+        run: |
+          echo "Building and Testing Containers"
+          echo "==============================="
+          echo "Changed Directories: $CHANGED_DOCKERFILE_DIRECTORY"
+          echo ""
+
+          # Build and test the containers
+          for DIR in $CHANGED_DOCKERFILE_DIRECTORY; do
+              echo "Working on: $DIR"
+              cd $DIR
+              docker build -t $DIR .
+              docker run $DIR
+              cd ..
+          done
+
+          echo "Finished Building and Testing Containers"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+    
+
+    
