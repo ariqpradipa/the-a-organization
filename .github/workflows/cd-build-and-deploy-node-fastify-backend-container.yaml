@@ -1,24 +1,43 @@
-name: Deploy Go Gin Backend Service
+name: Build and Deploy Node Fastify Container
 
 on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+    push:
+        branches: 
+            - main
+    workflow_dispatch:
 
 jobs:
-  cd-deploy-go-gin-backend:
+  cd-build-and-deploy-node-fastify-backend-container:
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Wait for go-gin-backend image to be built and pushed
-        uses: lewagon/wait-on-check-action@v1.3.4
-        with:
-          ref: ${{ github.ref }}
-          check-name: 'Build and push go-gin-backend for ARM64 (aarch64)'
-          repo-token: ${{ github.token }}
-          wait-interval: 10
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and deploy node-fastify-backend for x64
+        uses: docker/build-push-action@v6
+        with:
+          context: "{{defaultContext}}:./node-fastify-backend"
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/node-fastify-backend:latest
+      
+      - name: Build and deploy node-fastify-backend for ARM64 (aarch64)
+        uses: docker/build-push-action@v6
+        with:
+          context: "{{defaultContext}}:./node-fastify-backend"
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/node-fastify-backend:latest-arm64
+          platforms: linux/arm64
+      
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -46,8 +65,8 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
-          source: "go-gin-backend-manifest.yaml"
-          target: "~/kubernetes/deployments/go-gin-backend-manifest.yaml"
+          source: "node-fastify-backend-manifest.yaml"
+          target: "~/kubernetes/deployments/node-fastify-backend-manifest.yaml"
 
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@v1.0.3
@@ -55,4 +74,4 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
-          script: kubectl apply -f ~/kubernetes/deployments/go-gin-backend-manifest.yaml
+          script: kubectl apply -f ~/kubernetes/deployments/node-fastify-backend-manifest.yaml
