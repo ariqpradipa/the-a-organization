@@ -23,14 +23,14 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push for x64
+      - name: Build and push node-fastify-backend for x64
         uses: docker/build-push-action@v6
         with:
           context: "{{defaultContext}}:./node-fastify-backend"
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/node-fastify-backend:latest
       
-      - name: Build and push for ARM64 (aarch64)
+      - name: Build and push node-fastify-backend for ARM64 (aarch64)
         uses: docker/build-push-action@v6
         with:
           context: "{{defaultContext}}:./node-fastify-backend"

@@ -18,7 +18,6 @@ jobs:
           running-workflow-name: 'cd-build-and-push-node-fastify-backend-container'
           repo-token: ${{ github.token }}
           wait-interval: 10
-          allowed-conclusions: success,skipped
 
       - name: Checkout code
         uses: actions/checkout@v4
