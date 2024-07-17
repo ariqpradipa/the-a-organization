@@ -55,9 +55,8 @@ jobs:
           
       - name: Append SSH config
         run: |
-          mkdir -p /root/.ssh
-          echo "Host ${{ secrets.SSH_HOST }}" >> /root/.ssh/config
-          echo "ProxyCommand cloudflared access ssh --hostname %h" >> /root/.ssh/config
+          sudo echo "Host ${{ secrets.SSH_HOST }}" >> /root/.ssh/config
+          sudo echo "ProxyCommand cloudflared access ssh --hostname %h" >> /root/.ssh/config
 
       - name: Print out the content of the SSH config file
         run: cat ~/.ssh/config
