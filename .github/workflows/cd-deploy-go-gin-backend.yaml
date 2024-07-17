@@ -1,0 +1,47 @@
+name: Deploy Go Gin Backend Service
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  cd-deploy-go-gin-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Wait for go-gin-backend image to be built and pushed
+        uses: lewagon/wait-on-check-action@v1.3.4
+        with:
+          ref: ${{ github.ref }}
+          running-workflow-name: 'cd-build-and-push-go-gin-backend-container'
+          repo-token: ${{ github.token }}
+          wait-interval: 10
+          allowed-conclusions: success,skipped
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Append SSH config
+        run: |
+          mkdir -p $HOME/.ssh
+          echo "Host ${{ secrets.SSH_HOST }}" >> $HOME/.ssh/config
+          echo "  ProxyCommand /usr/local/bin/cloudflared access ssh --hostname %h" >> $HOME/.ssh/config
+
+      - name: copy file via ssh password
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          source: "go-gin-backend-manifest.yaml"
+          target: "~/kubernetes/deployments/go-gin-backend-manifest.yaml"
+
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          script: kubectl apply -f ~/kubernetes/deployments/go-gin-backend-manifest.yaml

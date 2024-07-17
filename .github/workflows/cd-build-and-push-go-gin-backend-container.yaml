@@ -7,7 +7,7 @@ on:
     workflow_dispatch:
 
 jobs:
-  build-and-push-go-gin-backend-container:
+  cd-build-and-push-go-gin-backend-container:
     runs-on: ubuntu-latest
 
     steps:
