@@ -15,7 +15,7 @@ jobs:
         uses: lewagon/wait-on-check-action@v1.3.4
         with:
           ref: ${{ github.ref }}
-          running-workflow-name: 'cd-build-and-push-node-fastify-backend-container'
+          check-name: 'Build and push node-fastify-backend for ARM64 (aarch64)'
           repo-token: ${{ github.token }}
           wait-interval: 10
 
