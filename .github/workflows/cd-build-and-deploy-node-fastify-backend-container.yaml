@@ -55,9 +55,11 @@ jobs:
 
       - name: Append SSH config
         run: |
-          mkdir -p $HOME/.ssh
-          echo "Host ${{ secrets.SSH_HOST }}" >> $HOME/.ssh/config
-          echo "  ProxyCommand /usr/local/bin/cloudflared access ssh --hostname %h" >> $HOME/.ssh/config
+          echo "Host ${{ secrets.SSH_HOST }}" >> ~/.ssh/config
+          echo "ProxyCommand /usr/local/bin/cloudflared access ssh --hostname %h" >> ~/.ssh/config
+
+      - name: Print out the content of the SSH config file
+        run: cat ~/.ssh/config
 
       - name: copy file via ssh password
         uses: appleboy/scp-action@v0.1.7
@@ -71,7 +73,7 @@ jobs:
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
           script: kubectl apply -f ~/kubernetes/deployments/node-fastify-backend-manifest.yaml
