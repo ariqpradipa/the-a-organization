@@ -1,4 +1,12 @@
-# The Monorepo for The A Organization
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/othneildrew/Best-README-Template">
+    <img src="https://nodeployfriday.com/images/ndf-logo.svg" alt="Logo" height="100">
+  </a>
+
+  <h2 align="center">The Monorepo for The A Organization</h2>
+</div>
 
 This repository hosts two backend services, one using Node.js and the other using Go. The Node.js backend utilizes the Fastify framework, while the Go backend employs the Gin framework. Both services are based on ready-to-use boilerplates.
 
@@ -122,3 +130,9 @@ flowchart TD
     I --> J
     J --> K
 ```
+
+## Contact
+
+Ariq Pradipa Santoso - ariq.pradipa@outlook.com
+
+Project Link: [https://github.com/ariqpradipa/the-a-organization](https://github.com/ariqpradipa/the-a-organization)
