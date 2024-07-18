@@ -79,7 +79,8 @@ Continuous Deployment (CD) is automatically triggered by any push to the `main` 
 2. Log in to Docker Hub.
 3. Set the version for `tag-version`, which will be used to tag the container build.
 4. Use `docker/build-push-action@v6` to build and push the image for both x64 and arm64 architectures.
-5. Start the deployment process:
+5. The registry for this container image can be accessed here [`https://hub.docker.com/repository/docker/encores/go-gin-backend`](https://hub.docker.com/repository/docker/encores/go-gin-backend)
+6. Start the deployment process:
    - Check out the code from the repository.
    - Set up Cloudflared (as the on-premise server is behind a Cloudflare tunnel).
    - Update the `go-gin-backend-manifest` image with `tag-version` and send it to the server using SCP.
@@ -90,7 +91,8 @@ Continuous Deployment (CD) is automatically triggered by any push to the `main` 
 2. Log in to Docker Hub.
 3. Set the version for `tag-version`, which will be used to tag the container build.
 4. Use `docker/build-push-action@v6` to build and push the image for both x64 and arm64 architectures.
-5. Start the deployment process:
+5. The registry for this container image can be accessed here [`https://hub.docker.com/repository/docker/encores/node-fastify-backend`](https://hub.docker.com/repository/docker/encores/node-fastify-backend)
+6. Start the deployment process:
    - Check out the code from the repository.
    - Set up Cloudflared (as the on-premise server is behind a Cloudflare tunnel).
    - Update the `node-fastify-backend-manifest` image with `tag-version` and send it to the server using SCP.
