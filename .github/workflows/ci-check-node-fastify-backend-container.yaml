@@ -3,6 +3,8 @@ name: Check Node Fastify Backend Service Container
 on:
   pull_request:
     types: [opened, synchronize, ready_for_review]
+    paths: 
+      - 'node-fastify-backend/**'
 
 jobs:
   ci-check-node-fastify-backend-container:

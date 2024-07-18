@@ -3,6 +3,8 @@ name: Test Node Fastify Backend
 on: 
   pull_request:
     types: [opened, synchronize, ready_for_review]
+    paths:
+      - 'node-fastify-backend/**'
 
 jobs:
   ci-test-node-fastify-backend:

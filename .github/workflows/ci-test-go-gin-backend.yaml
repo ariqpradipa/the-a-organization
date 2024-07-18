@@ -3,6 +3,8 @@ name: Test Go Gin Backend
 on:
   pull_request:
     types: [opened, synchronize, ready_for_review]
+    paths: 
+      - 'go-gin-backend/**'
 
 jobs:
   ci-test-go-gin-backend:

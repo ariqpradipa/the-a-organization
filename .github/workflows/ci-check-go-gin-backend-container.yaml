@@ -3,6 +3,8 @@ name: Check Go Gin Backend Service Container
 on:
   pull_request:
     types: [opened, synchronize, ready_for_review]
+    paths: 
+      - 'go-gin-backend/**'
 
 jobs:
   ci-check-go-gin-backend-container:
